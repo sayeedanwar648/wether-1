@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <input type="text" id="city">
+    <button onclick="getdata()" id="btn">Searh Weather</button>
+    <div id="container">
+
+    </div>
+    <div class="mapouter">
+        <div class="gmap_canvas"><iframe width="600" height="500" id="gmap_canvas"
+                frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe><a
+                href="https://123movies-to.org"></a><br>
+            
+        </div>
+    </div>
+    
+
+</body>
+</html>
+<script>
+// const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=91fc2865fbc1a936822d3122c04683f7`;
+function getdata(){
+    let city=document.getElementById("city").value;
+    let container=document.getElementById("container")
+    container.innerHTML=null
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=c0e85aa86a8a74a35f26971617d49a50`;
+    fetch(url).then(function(res){
+        return res.json();
+    }).then(function(res){
+        appendata(res)
+        console.log(res)
+    }).catch(function(err){
+        console.log(err)
+    })
+    function appendata(data){
+        let map=document.getElementById("gmap_canvas")
+
+        let name=document.createElement("p")
+        name.innerText=`City Name:${data.name}`
+        let current_temp=document.createElement("p")
+        current_temp.innerText=`Tempreture:${data.main.temp}`
+        let max=document.createElement("p")
+        max.innerText=`Max Tempreture:${data.main.temp_max}`;
+        let min=document.createElement("p")
+
+        min.innerText=`Min Tempreture:${data.main.temp_min}`;
+        let humidity=document.createElement("p")
+        humidity.innerText=`Humidity:${data.main.humidity}`;
+        let div =document.createElement("div")
+        div.append(name,current_temp,max,min,humidity)
+        container.append(div)
+        map.src=`https://maps.google.com/maps?q=${data.name}&t=&z=13&ie=UTF8&iwloc=&output=embed`
+
+
+
+    }
+    navigator.geolocation.getCurrentPosition(success);
+    function success(position){
+        var crd = position.coords;
+
+  console.log('Your current position is:');
+  console.log(`Latitude : ${crd.latitude}`);
+  console.log(`Longitude: ${crd.longitude}`);
+  console.log(`More or less ${crd.accuracy} meters.`);
+    
+
+}
+}
+
+</script>
